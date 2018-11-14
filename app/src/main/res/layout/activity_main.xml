@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:tools="http://schemas.android.com/tools"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <LinearLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+        <EditText
+                android:id="@+id/editText"
+                android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
 
     <expandabletv.omerco.com.expandabletv.ExpandableTextView
         android:id="@+id/text"
@@ -12,6 +29,49 @@
         android:layout_height="wrap_content"
         android:text="Hello World! Check this awesome Instagram like TextView"
         android:maxLines="2"
-/>
+        android:gravity="left"
+        app:expandedText="@string/expanded_text"
+        app:expandedTextColor="@color/colorAccent"
+        app:setUnderLine="true"
+    />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+    android:layout_marginTop="15dp"
+    android:orientation="vertical">
+        <Button
+                android:id="@+id/btnChangeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:textSize="12sp"
+                android:text="change text"
+        android:layout_gravity="bottom"/>
+        <Button
+                android:id="@+id/btnChangeColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="change expanded text color"
+        />
+        <Button
+                android:id="@+id/btnChangeUnderline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="change expanded text underline"
+                android:layout_gravity="bottom"/>
+    </LinearLayout>
+
+
+	<android.support.v7.widget.RecyclerView
+			android:id="@+id/list"
+			android:layout_width="match_parent"
+	        android:layout_height="match_parent">
+
+	</android.support.v7.widget.RecyclerView>
+
+
 
 </LinearLayout>

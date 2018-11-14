@@ -1,75 +1,152 @@
 package expandabletv.omerco.com.expandabletv;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.content.res.TypedArray;
 import android.support.annotation.Nullable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
+/**
+ * Creation Date: 13/11/2018
+ * Created By: Omer Cohen (omeronce1994)
+ * Expandable TextView that expanding by clicking on text
+ */
+
 public class ExpandableTextView extends android.support.v7.widget.AppCompatTextView {
 
-    private static final String DEFUALT_EXPANDING_TEXT = "more...";
-    private static final int DEFAULT_EXPANDING_TEXT_COLOR= 0xff9e9e9e;
-    private static final int DEFAULT_EXPANDING_TEXT_HIGHTLIGHT_COLOR= 0x00000000;
+    public static final String DEFUALT_EXPANDING_TEXT = "more...";
+    public static final int DEFAULT_EXPANDING_TEXT_COLOR= 0xff9e9e9e;
+    public static final int DEFAULT_EXPANDING_TEXT_HIGHTLIGHT_COLOR= 0x00000000;
 
     private String expandingText;
-    private int expandingTextColor;
-    private int expandingTextHighlightColor;
+    private ColorStateList expandingTextColor;
     private boolean underLineExpandingText;
     private SpannableString fullText;
+    private int tvMaxLines = 0;
 
     public ExpandableTextView(Context context) {
         super(context);
         expandingText = DEFUALT_EXPANDING_TEXT;
-        expandingTextColor = DEFAULT_EXPANDING_TEXT_COLOR;
+        expandingTextColor = ColorStateList.valueOf(DEFAULT_EXPANDING_TEXT_COLOR);
         underLineExpandingText = false;
-        expandingTextHighlightColor = DEFAULT_EXPANDING_TEXT_HIGHTLIGHT_COLOR;
+
+        tvMaxLines = getMaxLines();
+        setMovementMethod(LinkMovementMethod.getInstance());
+        setHighlightColor(ColorStateList.valueOf(DEFAULT_EXPANDING_TEXT_HIGHTLIGHT_COLOR).getDefaultColor());
     }
 
     public ExpandableTextView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        expandingText = DEFUALT_EXPANDING_TEXT;
-        expandingTextColor = DEFAULT_EXPANDING_TEXT_COLOR;
-        underLineExpandingText = false;
-        expandingTextHighlightColor = DEFAULT_EXPANDING_TEXT_HIGHTLIGHT_COLOR;
+        TypedArray a = context.getTheme().obtainStyledAttributes(
+                attrs,
+                R.styleable.ExpandableTextView,
+                0, 0);
+        try {
+            underLineExpandingText = a.getBoolean(R.styleable.ExpandableTextView_setUnderLine, false);
+            expandingText = a.getString(R.styleable.ExpandableTextView_expandedText);
+            if(TextUtils.isEmpty(expandingText)){
+                expandingText = DEFUALT_EXPANDING_TEXT;
+            }
+            expandingTextColor = a.getColorStateList(R.styleable.ExpandableTextView_expandedTextColor);
+            if(expandingTextColor == null){
+                expandingTextColor = ColorStateList.valueOf(DEFAULT_EXPANDING_TEXT_COLOR);
+            }
+        } finally {
+            a.recycle();
+        }
+        tvMaxLines = getMaxLines();
+        setMovementMethod(LinkMovementMethod.getInstance());
+        setHighlightColor(ColorStateList.valueOf(DEFAULT_EXPANDING_TEXT_HIGHTLIGHT_COLOR).getDefaultColor());
     }
 
     public ExpandableTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        expandingText = DEFUALT_EXPANDING_TEXT;
-        expandingTextColor = DEFAULT_EXPANDING_TEXT_COLOR;
-        underLineExpandingText = false;
-        expandingTextHighlightColor = DEFAULT_EXPANDING_TEXT_HIGHTLIGHT_COLOR;
+        TypedArray a = context.getTheme().obtainStyledAttributes(
+                attrs,
+                R.styleable.ExpandableTextView,
+                0, 0);
+        try {
+            underLineExpandingText = a.getBoolean(R.styleable.ExpandableTextView_setUnderLine, false);
+            expandingText = a.getString(R.styleable.ExpandableTextView_expandedText);
+            if(TextUtils.isEmpty(expandingText)){
+                expandingText = DEFUALT_EXPANDING_TEXT;
+            }
+            expandingTextColor = a.getColorStateList(R.styleable.ExpandableTextView_expandedTextColor);
+            if(expandingTextColor == null){
+                expandingTextColor = ColorStateList.valueOf(DEFAULT_EXPANDING_TEXT_COLOR);
+            }
+        } finally {
+            a.recycle();
+        }
+        tvMaxLines = getMaxLines();
+        setMovementMethod(LinkMovementMethod.getInstance());
+        setHighlightColor(ColorStateList.valueOf(DEFAULT_EXPANDING_TEXT_HIGHTLIGHT_COLOR).getDefaultColor());
     }
 
 
-    public SpannableString getFullText() {
-        return fullText;
-    }
-
-    public void setFullText(SpannableString fullText) {
-        this.fullText = fullText;
-    }
-
+    /**
+     * @return Integer value of expanding text
+     */
     public int getExpandingTextColor() {
-        return expandingTextColor;
+        return expandingTextColor.getDefaultColor();
     }
 
+    /**
+     * @param expandingTextColor set expanding text color
+     */
     public void setExpandingTextColor(int expandingTextColor) {
-        this.expandingTextColor = expandingTextColor;
+        this.expandingTextColor = ColorStateList.valueOf(expandingTextColor);
+        if(getLineCount()>0){
+            requestLayout();
+            invalidate();
+        }
     }
 
+    /**
+    * @return boolean if expanding text is underlined
+     */
     public boolean isUnderLineExpandingText() {
         return underLineExpandingText;
     }
 
+    /**
+     *
+     * @param underLineExpandingText
+     */
     public void setUnderLineExpandingText(boolean underLineExpandingText) {
         this.underLineExpandingText = underLineExpandingText;
+        if(getLineCount()>0){
+            requestLayout();
+            invalidate();
+        }
+    }
+
+    /**
+     *
+     * @return expandingText
+     */
+    public String getExpandingText() {
+        return expandingText;
+    }
+
+    /**
+     *
+     * @param expandingText
+     */
+    public void setExpandingText(String expandingText) {
+        this.expandingText = expandingText;
+        if(getLineCount()>0){
+            requestLayout();
+            invalidate();
+        }
     }
 
     @Override
@@ -85,8 +162,8 @@ public class ExpandableTextView extends android.support.v7.widget.AppCompatTextV
                 shortStringBuilder.append(secondLineString);
             } else {
                 String secondLineString="";
-                if(secondLineStart>secondLineEnd-moreStr.length()) {
-                    secondLineString = getText().toString().substring(secondLineStart, secondLineEnd - moreStr.length());
+                if(secondLineStart<secondLineEnd-moreStr.length()-1) {
+                    secondLineString = getText().toString().substring(secondLineStart, secondLineEnd - moreStr.length()-1);
                 }
                 else {
                     int lineLength = secondLineEnd-secondLineStart;
@@ -95,37 +172,46 @@ public class ExpandableTextView extends android.support.v7.widget.AppCompatTextV
                 secondLineString =secondLineString.concat(" "+moreStr);
                 shortStringBuilder.append(secondLineString);
             }
-
-            //shortStringBuilder.append(" "+moreStr);
-            //SpannableString spannableString = spanPostsText(getContext(),shortStringBuilder.toString(),userName);
-            SpannableString spannableString = new SpannableString(shortStringBuilder);
+            SpannableString spannableString = new SpannableString(shortStringBuilder.toString());
             StringBuilder spannedStringBuilder = new StringBuilder(spannableString);
             int startSpan = spannedStringBuilder.toString().length() - moreStr.length();
             int endSpan = startSpan + moreStr.length();
             spannableString.setSpan(new ClickableSpan() {
                 @Override
                 public void onClick(View widget) {
-                    setText(fullText);
+                    setTextFromSuper(fullText, BufferType.SPANNABLE);
                 }
 
                 @Override
                 public void updateDrawState(TextPaint ds) {
                     super.updateDrawState(ds);
-                    ds.setColor(expandingTextColor);
+                    ds.setColor(expandingTextColor.getDefaultColor());
                     ds.setUnderlineText(underLineExpandingText);
                 }
             },startSpan,endSpan,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            setMaxLines(Integer.MAX_VALUE);
-            //setEllipsize(null);
-            setHighlightColor(expandingTextHighlightColor);
-            setMovementMethod(LinkMovementMethod.getInstance());
-            setText(spannableString);
-            requestLayout();
-            invalidate();
-            return;
+
+            super.setMaxLines(Integer.MAX_VALUE);
+            super.setText(spannableString, BufferType.SPANNABLE);
         }
-        super.onLayout(changed, left, top, right, bottom);
+
     }
 
+    @Override
+    public void setText(CharSequence text, BufferType type) {
+        if(tvMaxLines!=0) {
+            super.setMaxLines(tvMaxLines);
+        }
+        super.setText(text, type);
+    }
+
+    @Override
+    public void setMaxLines(int maxLines) {
+        tvMaxLines = maxLines;
+        super.setMaxLines(maxLines);
+    }
+
+    private void setTextFromSuper(CharSequence text,BufferType type){
+        super.setText(text,type);
+    }
 }
 
