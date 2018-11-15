@@ -1,0 +1,7 @@
+<resources>
+	<declare-styleable name="ExpandableTextView">
+		<attr name="setUnderLine" format="boolean" />
+		<attr name="expandedText" format="string"/>
+		<attr name="expandedTextColor" format="reference"/>
+	</declare-styleable>
+</resources>

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ExpandableTv</string>
+    <string name="expanded_text">More</string>
 </resources>
