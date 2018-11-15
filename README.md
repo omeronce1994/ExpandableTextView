@@ -1,7 +1,7 @@
 # ExpandableTextView
 Expandable Text View Like Instagram
 
-#License
+# License
     
     Copyright (C) 2017 Omer Cohen(omeronce1994)
     
