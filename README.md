@@ -4,6 +4,8 @@ Expandable Text View Like Instagram
 
 [![](https://jitpack.io/v/omeronce1994/ExpandableTextView.svg)](https://jitpack.io/#omeronce1994/ExpandableTextView)
 
+![](expandableTextview-gif.gif)
+
 # Install
 
 Under your root build
